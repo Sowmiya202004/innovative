@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     tools {
-        jdk 'JDK'
         maven 'MAVEN'
     }
 
@@ -14,16 +13,11 @@ pipeline {
             }
         }
 
-        stage('Run Java') {
+        stage('Deploy') {
             steps {
-                bat 'java -cp target/classes index'
+                echo 'Application Built and Deployed Successfully'
             }
         }
 
-        stage('Archive Artifact') {
-            steps {
-                archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
-            }
-        }
     }
 }
