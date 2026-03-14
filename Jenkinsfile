@@ -14,21 +14,11 @@ pipeline {
             }
         }
 
-        stage('Deploy Website') {
+        stage('Deploy') {
             steps {
-                echo 'Publishing website'
+                echo 'Application Built and Deployed Successfully'
             }
         }
 
-    }
-
-    post {
-        success {
-            publishHTML([
-                reportDir: '.',
-                reportFiles: 'CourseApplet.html',
-                reportName: 'Course Website'
-            ])
-        }
     }
 }
