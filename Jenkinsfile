@@ -1,25 +1,41 @@
 pipeline {
     agent any
 
+    tools {
+        jdk 'JDK'        // Replace with your Jenkins JDK tool name
+        maven 'MAVEN'    // Replace with your Jenkins Maven tool name
+    }
+
+    environment {
+        TOMCAT_HOME = 'C:\\appache\\apache-tomcat-9.0.115-windows-x64\\apache-tomcat-9.0.115'
+        WAR_NAME = 'java.war'
+    }
+
     stages {
 
-        stage('Build') {
+        stage('Build WAR') {
             steps {
-                sh 'mvn clean compile'
+                echo "Building WAR..."
+                bat 'mvn clean package'
             }
         }
 
-        stage('Test') {
+        stage('Deploy WAR') {
             steps {
-                sh 'mvn test'
+                echo "Deploying WAR to Tomcat..."
+                bat """
+                    copy /Y target\\${WAR_NAME} ${TOMCAT_HOME}\\webapps\\
+                """
             }
         }
+    }
 
-        stage('Deploy') {
-            steps {
-                sh 'echo Application Deployed Successfully'
-            }
+    post {
+        success {
+            echo "Deployment complete! Access your app at http://localhost:8081/java/index.jsp"
         }
-
+        failure {
+            echo "Deployment failed! Check WAR name, paths, or Tomcat logs."
+        }
     }
 }
